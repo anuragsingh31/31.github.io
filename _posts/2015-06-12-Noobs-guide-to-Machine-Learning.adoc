@@ -1,6 +1,6 @@
 = Noob's guide to Machine Learning
 :hp-tags: machine learning
-:hp-image: 1.jpg
+:hp-image: desktop.jpg
 
 You might be completely overwhelmed by the information available over the internet
 and must be looking on how to start the journey in the world of data analytics,
