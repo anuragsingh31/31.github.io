@@ -1,0 +1,32 @@
+= Noob's guide to Machine Learning
+:hp-tags: Machine Learning
+
+You might be completely overwhelmed by the information available over the internet 
+and must be looking on how to start the journey in the world of data analytics, 
+don’t worry we are here to help , below you will find must know things to get started 
+and learn everything about machine learning. 
+
+One can directly get started using various available tools like R studio, 
+Amazon machine learning as a service Azure Machine learning, Anaconda(ipython) etc. 
+but before you do that you must know the basics or building blocks of machine learning approach.
+
+*Neural nets*/ *Support Vector Machine* etc. might sound great but these model implementation is the last step.
+The most important step is cleaning and processing the data, we will talk about it later in detail.
+
+For now, following topics are the building blocks, we will post about each of them in separate posts .
+
+	. Statistics
+    . Linear Algebra
+	. Data Cleaning
+	. Data Processing (Dimension Reduction)
+    . Feature Selection
+
+It’s time to clean the dust off your Math/Statistics book and revise the concepts about Linear algebra 
+and Mean/Mode/Standard Deviation , till you do that we will write the post about next step, 
+
+where we will learn a algorithm (PCA) for data processing and get hands on data cleaning 
+and processing step using Anaconda(ipython).
+
+Don’t worry if this information also overwhelmed you , we will teach you each and everything, Just stick with us.
+
+Happy Learning, See you next week
