@@ -1,38 +1,56 @@
 = Principal Component Analysis (PCA) Part - 1
-:hp-tags: PCA
+:hp-tags: Algorithms
 
 Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension
 Reduction of data, lets find out how it does that!
 
-We will talk in detail, from mathematic base to direct one line implementation in Scikit (python library for machine learning). Those who are only interested in one liner implementation can skip to the last.
+We will talk in detail, from mathematic base to direct one line implementation in *Scikit* (python library for machine learning). Those who are only interested in one liner implementation can skip to the Part - 2.
 
 But we will strongly advice against that, One must know what’s going on under the hood in order to be able to utilize it effectively, this small difference is the key here. So  if you have revised basics of Statistics and Linear algebra as said in our last post let’s continue. 
-What the hell is Principal Component Analysis ?
 
-Basically PCA detects correlation between variables, if strong correlation exists we attempt to reduce the dimensionality. It does that by finding the direction of maximum variance in high Dimensional data and project it on to a smaller dimensional subspace ( an example below will help in better understanding it).
+*What the hell is Principal Component Analysis ?*
 
-== Steps involved in PCA 
+When we have lots of data, we try to remove the reduntant part and utilise only important information.
 
-	. Standardize the data
-	. Calculate Eigen vector and Eigen values from covariance matrix after       standardizing,or directly from correlation matrix which is same as   
-      covariance matrix but is already standardized.  Another way is  
-      Singular Vector Decomposition
-	. If N is the no. of dimensions in new subspace, sort top N Eigen 
-      values in descending order and choose their eigenvectors accordingly.
-	. Construct projection matrix B from selected Eigen vectors
-	. Transform original dataset A via B to get reduced N-dimensional   
-      feature subspace Z.
+Assume you are on diet, and obviously you are hungry and when you open refrigerator, your roommate has placed a large creamy chocolate cake just to mess with you, you are salivating now. so you try to come up with the reasons should i eat it or not ? when deciding it what information will help you ?
+
+so you look on the box of cake, there is:
+
+. Company name
+. Address of the bakery
+. Calories count
+. Name of the delivery boy 
+. Manufacturing date
+. Content of the cake
+. Contact number
+
+*Total 7*  (Called *features* in machine learning lingo).
+
+so what of the above information will help you ?
+The smart ass like you will directly check *calories count* and *content of the cake* and *Manufacturing date* some of us may be will check company name also for trust issues. 
+
+See other is irrelevant information all redundant data, you removed it in an instant. So only *3 features* were helpful for us out of *7*.
+
+Similarly in the world of machine learning when we have Gigabytes or Terbytes of data and we want to play with it and can't manually identify relavent information, PCA helps us.
+
+Basically PCA detects correlation between variables, if strong correlation exists we attempt to reduce the dimensionality. It does that by finding the direction of maximum *variance*(Relavent information for us) in high Dimensional data and project it on to a smaller dimensional subspace ( an example below will help in better understanding it).
+
 
 
 == Let’s Start
 
+In PCA we calculate Principal Component which is Eigen vector.
 You might know how to compute Eigen vectors and Eigen values but what are they? How are they helping us?
 
 Eigen vector and Eigen value comes in pairs, for every Eigen vector we have Eigen value.
+
 Eigen Vector tells us the direction of Principal Component and It’s corresponding Eigen 
-value will tell us how much variance is there in data in that direction, 
-greater the value of Eigen value greater is the variance in that direction. 
-The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. 
+value will tell us how much variance (Relavent information for us) is there in data in that direction,
+
+Greater the value of Eigen value greater is the variance in that direction. 
+The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. like in our cake example we had 7 so we will have 7 Eigenvector/value pairs.
+
+Out of which we will remove the Eigen vectors with least Eigen values like we removed the features (contact number, delivery boy signature , address etc.)
 
 Now let’s take a look at an example for better understanding.
 Suppose we have 3- Dimensional data of 100,000 Flats. We have 3 features House size, 
@@ -54,4 +72,17 @@ by doing so we get data with reduced dimensions but retaining important informat
 image::pca3.png[]
 
 So this is what it will look like in sub dimension space, and now we can work it on further.
+
+== Steps involved in PCA 
+
+	. Standardize the data
+	. Calculate Eigen vector and Eigen values from covariance matrix after       standardizing,or directly from correlation matrix which is same as   
+      covariance matrix but is already standardized.  Another way is  
+      Singular Vector Decomposition
+	. If N is the no. of dimensions in new subspace, sort top N Eigen 
+      values in descending order and choose their eigenvectors accordingly.
+	. Construct projection matrix B from selected Eigen vectors
+	. Transform original dataset A via B to get reduced N-dimensional   
+      feature subspace Z.
+
 As in *Part 1* we learned the what is happening in here in *Part 2* we will see how to do it mathematically and practically with python.
