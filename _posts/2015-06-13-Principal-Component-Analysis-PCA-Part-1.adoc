@@ -1,7 +1,7 @@
 = Principal Component Analysis (PCA) Part - 1
-Doc Writer Anurag Singh
-v1.0 Anurag Singh
 :hp-tags: Algorithms
+Doc Writer Anurag Singh
+
 
 Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension
 Reduction of data, lets find out how it does that!
