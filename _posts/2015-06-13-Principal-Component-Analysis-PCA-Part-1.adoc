@@ -38,11 +38,11 @@ Now let’s take a look at an example for better understanding.
 Suppose we have 3- Dimensional data of 100,000 Flats. We have 3 features House size, 
 No. of rooms and Floor no. of the Flat. And if we plot it , it will look like this
 
-image::pca1.jpg[]
+image::pca1.png[]
  
 Suppose if we calculate  Principal Component( Eigen vectors) and plot them in above figure, it will look like this
 
-image::pca2.jpg[]
+image::pca2.png[]
 
 Suppose EV1, EV2 and EV3 are Eigen vectors with Eigen value of 10, 3 and 0 for House size, no. of rooms and Floor respectively.
 We see that EV1 has the highest Eigen value and EV2 has non negative Eigen value, but EV3 has 0 value
@@ -51,7 +51,7 @@ We see that EV1 has the highest Eigen value and EV2 has non negative Eigen value
 So we can remove this dimension and plot again in new subspace if EV1 and EV2 rather than X, Y and Z,
 by doing so we get data with reduced dimensions but retaining important information. 
 
-image::pca3.jpg[]
+image::pca3.png[]
 
 So this is what it will look like in sub dimension space, and now we can work it on further.
 As in *Part 1* we learned the what is happening in here in *Part 2* we will see how to do it mathematically and practically with python.
