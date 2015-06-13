@@ -1,0 +1,57 @@
+= Principal Component Analysis (PCA) Part - 1
+:hp-tags: PCA
+
+Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension
+Reduction of data, lets find out how it does that!
+
+We will talk in detail, from mathematic base to direct one line implementation in Scikit (python library for machine learning). Those who are only interested in one liner implementation can skip to the last.
+
+But we will strongly advice against that, One must know what’s going on under the hood in order to be able to utilize it effectively, this small difference is the key here. So  if you have revised basics of Statistics and Linear algebra as said in our last post let’s continue. 
+What the hell is Principal Component Analysis ?
+
+Basically PCA detects correlation between variables, if strong correlation exists we attempt to reduce the dimensionality. It does that by finding the direction of maximum variance in high Dimensional data and project it on to a smaller dimensional subspace ( an example below will help in better understanding it).
+
+== Steps involved in PCA 
+
+	. Standardize the data
+	. Calculate Eigen vector and Eigen values from covariance matrix after       standardizing,or directly from correlation matrix which is same as   
+      covariance matrix but is already standardized.  Another way is  
+      Singular Vector Decomposition
+	. If N is the no. of dimensions in new subspace, sort top N Eigen 
+      values in descending order and choose their eigenvectors accordingly.
+	. Construct projection matrix B from selected Eigen vectors
+	. Transform original dataset A via B to get reduced N-dimensional   
+      feature subspace Z.
+
+
+== Let’s Start
+
+You might know how to compute Eigen vectors and Eigen values but what are they? How are they helping us?
+
+Eigen vector and Eigen value comes in pairs, for every Eigen vector we have Eigen value.
+Eigen Vector tells us the direction of Principal Component and It’s corresponding Eigen 
+value will tell us how much variance is there in data in that direction, 
+greater the value of Eigen value greater is the variance in that direction. 
+The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. 
+
+Now let’s take a look at an example for better understanding.
+Suppose we have 3- Dimensional data of 100,000 Flats. We have 3 features House size, 
+No. of rooms and Floor no. of the Flat. And if we plot it , it will look like this
+
+image::pca1.jpg[]
+ 
+Suppose if we calculate  Principal Component( Eigen vectors) and plot them in above figure, it will look like this
+
+image::pca2.jpg[]
+
+Suppose EV1, EV2 and EV3 are Eigen vectors with Eigen value of 10, 3 and 0 for House size, no. of rooms and Floor respectively.
+We see that EV1 has the highest Eigen value and EV2 has non negative Eigen value, but EV3 has 0 value
+(i.e no Height/no valuable data) which means Floor no is not a significant feature while deciding which flat to buy.
+
+So we can remove this dimension and plot again in new subspace if EV1 and EV2 rather than X, Y and Z,
+by doing so we get data with reduced dimensions but retaining important information. 
+
+image::pca3.jpg[]
+
+So this is what it will look like in sub dimension space, and now we can work it on further.
+As in *Part 1* we learned the what is happening in here in *Part 2* we will see how to do it mathematically and practically with python.
