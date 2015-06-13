@@ -1,5 +1,6 @@
 = Principal Component Analysis (PCA) Part - 1
 Doc Writer Anurag Singh
+v1.0 Anurag Singh
 :hp-tags: Algorithms
 
 Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension
