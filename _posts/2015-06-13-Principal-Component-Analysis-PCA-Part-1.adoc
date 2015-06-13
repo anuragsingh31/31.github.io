@@ -1,4 +1,5 @@
 = Principal Component Analysis (PCA) Part - 1
+Doc Writer Anurag Singh
 :hp-tags: Algorithms
 
 Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension
@@ -6,13 +7,13 @@ Reduction of data, lets find out how it does that!
 
 We will talk in detail, from mathematic base to direct one line implementation in *Scikit* (python library for machine learning). Those who are only interested in one liner implementation can skip to the Part - 2.
 
-But we will strongly advice against that, One must know what’s going on under the hood in order to be able to utilize it effectively, this small difference is the key here. So  if you have revised basics of Statistics and Linear algebra as said in our last post let’s continue. 
+But we will strongly advice against that, one must know what’s going on under the hood in order to be able to utilize it effectively, this small difference is the key here. So  if you have revised basics of Statistics and Linear algebra as said in our last post let’s continue. 
 
 *What the hell is Principal Component Analysis ?*
 
 When we have lots of data, we try to remove the reduntant part and utilise only important information.
 
-Assume you are on diet, and obviously you are hungry and when you open refrigerator, your roommate has placed a large creamy chocolate cake just to mess with you, you are salivating now. so you try to come up with the reasons should i eat it or not ? when deciding it what information will help you ?
+Assume you are on diet, and obviously you are hungry and when you open the refrigerator, your roommate has placed a large creamy chocolate cake just to mess with you, you are salivating now. So you try to come up with the reasons should i eat it or not ? When deciding it what information will help you ?
 
 so you look on the box of cake, there is:
 
@@ -29,7 +30,7 @@ so you look on the box of cake, there is:
 so what of the above information will help you ?
 The smart ass like you will directly check *calories count* and *content of the cake* and *Manufacturing date* some of us may check company name also for trust issues. 
 
-See other is irrelevant information all redundant data, you removed it in an instant. So only *3 features* were helpful for us out of *7*.
+See rest is irrelevant information all redundant data, you removed it in an instant. So only *3 features* were helpful for us out of *7*.
 
 Similarly in the world of machine learning when we have Gigabytes or Terabytes of data and we want to play with it and can't manually identify relavent information, PCA helps us.
 
@@ -39,7 +40,7 @@ Basically PCA detects correlation between variables, if strong correlation exist
 
 == Let’s Start
 
-In PCA we calculate Eigen vector and Eigen value they come in pairs.
+In PCA we calculate Eigen vector and Eigen value, they come in pairs.
 You might know how to compute Eigen vectors and Eigen values but what are they? 
 
 *How are they helping us?* +
@@ -48,14 +49,14 @@ You might know how to compute Eigen vectors and Eigen values but what are they?
 *Eigen Vector tells us the direction of Principal Component* and It’s corresponding Eigen 
 value will tell us how much *variance (Relavent information for us)* is there in data in that direction,
 
-Greater the value of Eigen value greater is the variance in that direction. 
-The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. like in our cake example we had 7 so we will have 7 Eigenvector/value pairs.
+Greater the value of Eigen value, greater is the variance in that direction. 
+The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. Like in our cake example we had 7 so we will have 7 Eigenvector/value pairs.
 
 Out of which we will remove the Eigen vectors with least Eigen values like we removed the features (contact number, delivery boy signature , address etc.)
 
 Now let’s take a look at an example for better understanding.
 Suppose we have 3- Dimensional data of 100,000 Flats. We have 3 features House size, 
-No. of rooms and Floor no. of the Flat. And if we plot it , it will look like this
+No. of rooms and Floor no. of the Flat. And if we plot it , it will look something like this
 
 image::pca1.png[]
  
@@ -68,11 +69,11 @@ We see that EV1 has the highest Eigen value and EV2 has non negative Eigen value
 (i.e no Height/no valuable data) which means Floor number is not a significant feature while deciding which flat to buy.
 
 So we can remove this dimension and plot again in new subspace if EV1 and EV2 rather than X, Y and Z,
-by doing so we get data with reduced dimensions but retaining important information. 
+by doing so we get data with reduced dimensions while retaining important information. 
 
 image::pca3.png[]
 
-So this is what it will look like in sub dimension space, and now we can work it on further.
+So this is what it will look like in sub dimension space, and now we can work on it further.
 
 == Steps involved in PCA 
 
@@ -81,7 +82,7 @@ So this is what it will look like in sub dimension space, and now we can work it
       covariance matrix but is already standardized.  Another way is  
       Singular Vector Decomposition
 	. If N is the no. of dimensions in new subspace, sort top N Eigen 
-      values in descending order and choose their eigenvectors accordingly.
+      values in descending order and choose their eigen vectors accordingly.
 	. Construct projection matrix B from selected Eigen vectors
 	. Transform original dataset A via B to get reduced N-dimensional   
       feature subspace Z.
