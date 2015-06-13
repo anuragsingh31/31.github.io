@@ -27,11 +27,11 @@ so you look on the box of cake, there is:
 *Total 7*  (Called *features* in machine learning lingo).
 
 so what of the above information will help you ?
-The smart ass like you will directly check *calories count* and *content of the cake* and *Manufacturing date* some of us may be will check company name also for trust issues. 
+The smart ass like you will directly check *calories count* and *content of the cake* and *Manufacturing date* some of us may check company name also for trust issues. 
 
 See other is irrelevant information all redundant data, you removed it in an instant. So only *3 features* were helpful for us out of *7*.
 
-Similarly in the world of machine learning when we have Gigabytes or Terbytes of data and we want to play with it and can't manually identify relavent information, PCA helps us.
+Similarly in the world of machine learning when we have Gigabytes or Terabytes of data and we want to play with it and can't manually identify relavent information, PCA helps us.
 
 Basically PCA detects correlation between variables, if strong correlation exists we attempt to reduce the dimensionality. It does that by finding the direction of maximum *variance*(Relavent information for us) in high Dimensional data and project it on to a smaller dimensional subspace ( an example below will help in better understanding it).
 
@@ -39,13 +39,14 @@ Basically PCA detects correlation between variables, if strong correlation exist
 
 == Let’s Start
 
-In PCA we calculate Principal Component which is Eigen vector.
-You might know how to compute Eigen vectors and Eigen values but what are they? How are they helping us?
+In PCA we calculate Eigen vector and Eigen value they come in pairs.
+You might know how to compute Eigen vectors and Eigen values but what are they? 
 
-Eigen vector and Eigen value comes in pairs, for every Eigen vector we have Eigen value.
+*How are they helping us?* +
 
-Eigen Vector tells us the direction of Principal Component and It’s corresponding Eigen 
-value will tell us how much variance (Relavent information for us) is there in data in that direction,
+
+*Eigen Vector tells us the direction of Principal Component* and It’s corresponding Eigen 
+value will tell us how much *variance (Relavent information for us)* is there in data in that direction,
 
 Greater the value of Eigen value greater is the variance in that direction. 
 The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. like in our cake example we had 7 so we will have 7 Eigenvector/value pairs.
@@ -62,9 +63,9 @@ Suppose if we calculate  Principal Component( Eigen vectors) and plot them in ab
 
 image::pca2.png[]
 
-Suppose EV1, EV2 and EV3 are Eigen vectors with Eigen value of 10, 3 and 0 for House size, no. of rooms and Floor respectively.
+Suppose EV1, EV2 and EV3 are Eigen vectors with Eigen value of 10, 3 and 0 for House size, no. of rooms and Floor number respectively.
 We see that EV1 has the highest Eigen value and EV2 has non negative Eigen value, but EV3 has 0 value
-(i.e no Height/no valuable data) which means Floor no is not a significant feature while deciding which flat to buy.
+(i.e no Height/no valuable data) which means Floor number is not a significant feature while deciding which flat to buy.
 
 So we can remove this dimension and plot again in new subspace if EV1 and EV2 rather than X, Y and Z,
 by doing so we get data with reduced dimensions but retaining important information. 
