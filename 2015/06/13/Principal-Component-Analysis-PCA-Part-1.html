@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Principal Component Analysis (PCA) Part - 1</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="//anuragsingh31.github.io/themes/Roon/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:400,700,400italic,700italic|Open+Sans:400italic,700italic,700,400">
+    <link rel="stylesheet" type="text/css" href="//anuragsingh31.github.io/themes/Roon/assets/css/screen.css?v=1.0.0" />
+
+    <link rel="canonical" href="https://anuragsingh31.github.io/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html" />
+    
+    <meta property="og:site_name" content="Everything about Machine Learning" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Principal Component Analysis (PCA) Part - 1" />
+    <meta property="og:description" content="Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension Reduction of data, lets find out how it does that! We will talk in detail, from mathematic base to direct one line implementation in Scikit (python..." />
+    <meta property="og:url" content="https://anuragsingh31.github.io/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html" />
+    <meta property="article:published_time" content="2015-06-12T18:30:00.000Z" />
+    <meta property="article:modified_time" content="2015-06-14T08:55:25.950Z" />
+    <meta property="article:tag" content="Algorithms" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Principal Component Analysis (PCA) Part - 1" />
+    <meta name="twitter:description" content="Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension Reduction of data, lets find out how it does that! We will talk in detail, from mathematic base to direct one line implementation in Scikit (python..." />
+    <meta name="twitter:url" content="https://anuragsingh31.github.io/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Everything about Machine Learning",
+    "author": {
+        "@type": "Person",
+        "image": "https://avatars.githubusercontent.com/u/7066944?v=3",
+        "url": "undefined/author/undefined"
+    },
+    "headline": "Principal Component Analysis (PCA) Part - 1",
+    "url": "https://anuragsingh31.github.io/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html",
+    "datePublished": "2015-06-12T18:30:00.000Z",
+    "dateModified": "2015-06-14T08:55:25.950Z",
+    "keywords": "Algorithms",
+    "description": "Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension Reduction of data, lets find out how it does that! We will talk in detail, from mathematic base to direct one line implementation in Scikit (python..."
+}
+    </script>
+
+    <meta name="generator" content="Ghost ?" />
+    <link rel="alternate" type="application/rss+xml" title="Everything about Machine Learning" href="https://anuragsingh31.github.io/rss" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+</head>
+<body class="post-template tag-Algorithms  noimage">
+
+    
+
+
+    <article role="main" class="">
+        <header>
+            <a href="https://anuragsingh31.github.io" id="home_link">«</a>
+            <div class="meta"><time datetime="2015-06-13"><a href="/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html">June 13, 2015</a></time> <span class="count" id="js-reading-time"></span></div>
+            <h1>Principal Component Analysis (PCA) Part - 1</h1>
+        </header>
+
+        <div class="text" id="js-post-content">
+            <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Today we will learn about PCA (Principal Component Analysis), PCA is used for dimension
+Reduction of data, lets find out how it does that!</p>
+</div>
+<div class="paragraph">
+<p>We will talk in detail, from mathematic base to direct one line implementation in <strong>Scikit</strong> (python library for machine learning). Those who are only interested in one liner implementation can skip to the Part - 2.</p>
+</div>
+<div class="paragraph">
+<p>But we will strongly advice against that, one must know what’s going on under the hood in order to be able to utilize it effectively, this small difference is the key here. So  if you have revised basics of Statistics and Linear algebra as said in our last post let’s continue.</p>
+</div>
+<div class="paragraph">
+<p><strong>What the hell is Principal Component Analysis ?</strong></p>
+</div>
+<div class="paragraph">
+<p>When we have lots of data, we try to remove the reduntant part and utilise only important information.</p>
+</div>
+<div class="paragraph">
+<p>Assume you are on diet, and obviously you are hungry and when you open the refrigerator, your roommate has placed a large creamy chocolate cake just to mess with you, you are salivating now. So you try to come up with the reasons should i eat it or not ? When deciding it what information will help you ?</p>
+</div>
+<div class="paragraph">
+<p>so you look on the box of cake, there is:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Company name</p>
+</li>
+<li>
+<p>Address of the bakery</p>
+</li>
+<li>
+<p>Calories count</p>
+</li>
+<li>
+<p>Name of the delivery boy</p>
+</li>
+<li>
+<p>Manufacturing date</p>
+</li>
+<li>
+<p>Content of the cake</p>
+</li>
+<li>
+<p>Contact number</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Total 7</strong>  (Called <strong>features</strong> in machine learning lingo).</p>
+</div>
+<div class="paragraph">
+<p>so what of the above information will help you ?
+The smart ass like you will directly check <strong>calories count</strong> and <strong>content of the cake</strong> and <strong>Manufacturing date</strong> some of us may check company name also for trust issues.</p>
+</div>
+<div class="paragraph">
+<p>See rest is irrelevant information all redundant data, you removed it in an instant. So only <strong>3 features</strong> were helpful for us out of <strong>7</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Similarly in the world of machine learning when we have Gigabytes or Terabytes of data and we want to play with it and can&#8217;t manually identify relavent information, PCA helps us.</p>
+</div>
+<div class="paragraph">
+<p>Basically PCA detects correlation between variables, if strong correlation exists we attempt to reduce the dimensionality. It does that by finding the direction of maximum <strong>variance</strong>(Relavent information for us) in high Dimensional data and project it on to a smaller dimensional subspace ( an example below will help in better understanding it).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_let_s_start">Let’s Start</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In PCA we calculate Eigen vector and Eigen value, they come in pairs.
+You might know how to compute Eigen vectors and Eigen values but what are they?</p>
+</div>
+<div class="paragraph">
+<p><strong>How are they helping us?</strong><br></p>
+</div>
+<div class="paragraph">
+<p><strong>Eigen Vector tells us the direction of Principal Component</strong> and It’s corresponding Eigen
+value will tell us how much <strong>variance (Relavent information for us)</strong> is there in data in that direction,</p>
+</div>
+<div class="paragraph">
+<p>Greater the value of Eigen value, greater is the variance in that direction.
+The amount of Eigen vectors/ values that exists equals the no. of dimensions that data has. Like in our cake example we had 7 so we will have 7 Eigenvector/value pairs.</p>
+</div>
+<div class="paragraph">
+<p>Out of which we will remove the Eigen vectors with least Eigen values like we removed the features (contact number, delivery boy signature , address etc.)</p>
+</div>
+<div class="paragraph">
+<p>Now let’s take a look at an example for better understanding.
+Suppose we have 3- Dimensional data of 100,000 Flats. We have 3 features House size,
+No. of rooms and Floor no. of the Flat. And if we plot it , it will look something like this</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/pca1.png" alt="pca1.png">
+</div>
+</div>
+<div class="paragraph">
+<p>Suppose if we calculate  Principal Component( Eigen vectors) and plot them in above figure, it will look like this</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/pca2.png" alt="pca2.png">
+</div>
+</div>
+<div class="paragraph">
+<p>Suppose EV1, EV2 and EV3 are Eigen vectors with Eigen value of 10, 3 and 0 for House size, no. of rooms and Floor number respectively.
+We see that EV1 has the highest Eigen value and EV2 has non negative Eigen value, but EV3 has 0 value
+(i.e no Height/no valuable data) which means Floor number is not a significant feature while deciding which flat to buy.</p>
+</div>
+<div class="paragraph">
+<p>So we can remove this dimension and plot again in new subspace if EV1 and EV2 rather than X, Y and Z,
+by doing so we get data with reduced dimensions while retaining important information.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/pca3.png" alt="pca3.png">
+</div>
+</div>
+<div class="paragraph">
+<p>So this is what it will look like in sub dimension space, and now we can work on it further.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_steps_involved_in_pca">Steps involved in PCA</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Standardize the data</p>
+</li>
+<li>
+<p>Calculate Eigen vector and Eigen values from covariance matrix after       standardizing,or directly from correlation matrix which is same as
+covariance matrix but is already standardized.  Another way is
+Singular Vector Decomposition</p>
+</li>
+<li>
+<p>If N is the no. of dimensions in new subspace, sort top N Eigen
+values in descending order and choose their eigen vectors accordingly.</p>
+</li>
+<li>
+<p>Construct projection matrix B from selected Eigen vectors</p>
+</li>
+<li>
+<p>Transform original dataset A via B to get reduced N-dimensional
+feature subspace Z.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>As in <strong>Part 1</strong> we learned the what is happening in here in <strong>Part 2</strong> we will see how to do it mathematically and practically with python.</p>
+</div>
+</div>
+</div>
+        </div>
+
+        <menu>
+            <a href="" id="btn_share" class="btn" title="Share">
+                <span aria-hidden="true" data-icon="S"></span>
+                <strong>Share</strong>
+            </a>
+            <a href="http://twitter.com/share?text=Principal%20Component%20Analysis%20(PCA)%20Part%20-%201&url=https://anuragsingh31.github.io/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" id="btn_comment" class="btn" target="_blank">
+                <span aria-hidden="true" data-icon="C"></span> Comment on Twitter
+            </a>
+        </menu>
+
+
+        <footer class="post-footer" role="contentinfo">
+
+            <div class="vcard">
+                <!-- <a href="https://anuragsingh31.github.io/rss" id="btn_feed" class="btn" title="Feed" target="_blank">
+                    <span aria-hidden="true" data-icon=")"></span>
+                    <strong>Feed</strong>
+                </a> -->
+
+                <a href="" class="photo">
+                    <span style="background-image: url('https://avatars.githubusercontent.com/u/7066944?v=3');">
+                        <img src="https://avatars.githubusercontent.com/u/7066944?v=3" alt="">
+                    </span>
+                </a>
+
+                <div class="details">
+                    <h4><a href="" class="url n"></a></h4>
+                    
+                    
+                </div>
+            </div>
+
+            <div id="user_bio">
+                <div class="inner">
+                    
+                </div>
+            </div>
+
+        </footer>
+
+
+
+
+    <section class="post-comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+      var disqus_shortname = 'councilofdata'; // required: replace example with your forum shortname
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </section>
+
+
+    </article>
+
+    <div id="share_modal">
+        <div class="wrap">
+            <div class="inner">
+                <header>
+                    Share
+                    <a href="" class="close" title="Close">&times;</a>
+                </header>
+
+                <div class="roon-share-links">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+                    <div id="fb-elems">
+                        <div id="fb-root"></div>
+                        <script>(function(d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s); js.id = id;
+                        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=463438580397968";
+                        fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));</script>
+                        <div class="fb-like" data-send="false" data-layout="button_count" data-width="110" data-show-faces="false" data-font="arial"></div>
+                    </div>
+
+                    <div id="pinit-btn">
+                        <a href="//pinterest.com/pin/create/button/?url=https://anuragsingh31.github.io/2015/06/13/Principal-Component-Analysis-PCA-Part-1.html&amp;description=Principal%20Component%20Analysis%20(PCA)%20Part%20-%201-Everything%20about%20Machine%20Learning " data-pin-do="buttonPin" data-pin-config="beside"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png"></a>
+                        <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+
+            function get_text(el) {
+                ret = "";
+                var length = el.childNodes.length;
+                for(var i = 0; i < length; i++) {
+                    var node = el.childNodes[i];
+                    if(node.nodeType != 8) {
+                        ret += node.nodeType != 1 ? node.nodeValue : get_text(node);
+                    }
+                }
+                return ret;
+            }
+            function reading_time () {
+                var post_content = document.getElementById('js-post-content');
+                if (post_content) {
+                    var words = get_text(post_content),
+                        count = words.split(/\s+/).length,
+                        read_time = Math.ceil((count / 150)),
+                        read_time_node = document.createTextNode(read_time + ' min read');
+                    document.getElementById('js-reading-time').appendChild(read_time_node);
+                }
+            }
+
+        function no_schema_links () {
+            var links = document.querySelectorAll('.js-remove-domain-schema');
+            if (links) {
+                for (i = 0; i < links.length; ++i) {
+                    var link = links[i],
+                        text = link.innerHTML,
+                        no_schema = text.replace(/.*?:\/\//g, "");
+                    link.innerHTML = no_schema;
+                }
+            }
+        }
+
+        window.onload = function () {
+            no_schema_links();
+
+            reading_time();
+        }
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();      
+      </script>
+
+        <script>
+            $(function(){
+                var share_modal = $("#share_modal"),
+                    update_social_links = true;
+
+                $("#btn_share").click(function(){
+                    var that = $(this);
+                    share_modal.fadeIn(200);
+                    return false;
+                });
+
+                share_modal.click(function(e){
+                    if (e.target.className == "wrap" || e.target.id == "share_modal") {
+                        share_modal.fadeOut(200);
+                    }
+                    return false;
+                });
+
+                share_modal.find("div.inner > header > a.close").click(function(){
+                    share_modal.fadeOut(200);
+                    return false;
+                });
+            });
+        </script>
+
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-63622163-2', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+
+</body>
+</html>
